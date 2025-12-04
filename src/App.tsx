@@ -7,12 +7,14 @@ export default function App() {
 
   return (
     <>
-      <Canvas>
+      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
         <StageManager />
       </Canvas>
 
       {/* Basic Controls */}
-      <div style={{ position: "absolute", top: 20, left: 20 }}>
+      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 100 }}>
         <button onClick={() => (isPlaying ? pause() : play())}>
           {isPlaying ? "Pause" : "Play"}
         </button>

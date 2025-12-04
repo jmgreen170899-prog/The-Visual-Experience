@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 
-export default function Stage1Chaos({ t }: { t: number }) {
+export default function Stage1Chaos({ t: _t }: { t: number }) {
   const ref = useRef<any>();
 
   useFrame(({ clock }) => {
