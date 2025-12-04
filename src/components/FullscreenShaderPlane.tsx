@@ -1,10 +1,11 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useRef, useMemo } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface FullscreenShaderPlaneProps {
   fragmentShader: string;
-  uniforms?: Record<string, any>;
+  t: number;
+  extraUniforms?: Record<string, any>;
 }
 
 const defaultVertexShader = `
@@ -18,21 +19,31 @@ void main() {
 
 export default function FullscreenShaderPlane({
   fragmentShader,
-  uniforms = {},
+  t,
+  extraUniforms = {},
 }: FullscreenShaderPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const { size } = useThree();
 
-  const shaderUniforms = useRef({
-    u_time: { value: 0 },
-    u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-    u_t: { value: 0 },
-    ...uniforms,
-  });
+  const shaderUniforms = useMemo(
+    () => ({
+      u_time: { value: 0 },
+      u_t: { value: 0 },
+      u_resolution: { value: new THREE.Vector2(size.width, size.height) },
+      ...Object.entries(extraUniforms).reduce((acc, [key, val]) => {
+        acc[key] = { value: val };
+        return acc;
+      }, {} as Record<string, { value: any }>),
+    }),
+    [size.width, size.height, extraUniforms]
+  );
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
       const material = meshRef.current.material as THREE.ShaderMaterial;
       material.uniforms.u_time.value = clock.getElapsedTime();
+      material.uniforms.u_t.value = t;
+      material.uniforms.u_resolution.value.set(size.width, size.height);
     }
   });
 
@@ -42,7 +53,7 @@ export default function FullscreenShaderPlane({
       <shaderMaterial
         vertexShader={defaultVertexShader}
         fragmentShader={fragmentShader}
-        uniforms={shaderUniforms.current}
+        uniforms={shaderUniforms}
       />
     </mesh>
   );
