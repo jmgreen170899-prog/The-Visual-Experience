@@ -2,13 +2,15 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function Stage2Patterns({ t: _t }: { t: number }) {
+export default function Stage2Patterns({ t }: { t: number }) {
   const ref = useRef<THREE.Mesh>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (ref.current) {
-      ref.current.rotation.z = clock.getElapsedTime() * 0.5;
-      ref.current.scale.setScalar(1 + Math.sin(clock.getElapsedTime()) * 0.2);
+      // Rotate based on t
+      ref.current.rotation.z = t * Math.PI * 4;
+      // Scale pulses using t
+      ref.current.scale.setScalar(1 + Math.sin(t * Math.PI * 4) * 0.2);
     }
   });
 

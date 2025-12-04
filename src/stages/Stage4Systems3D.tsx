@@ -2,12 +2,13 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function Stage4Systems3D({ t: _t }: { t: number }) {
+export default function Stage4Systems3D({ t }: { t: number }) {
   const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = clock.getElapsedTime() * 0.4;
+      // Rotate based on t
+      groupRef.current.rotation.y = t * Math.PI * 3.2;
     }
   });
 

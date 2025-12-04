@@ -2,14 +2,15 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function Stage8Emergence({ t: _t }: { t: number }) {
+export default function Stage8Emergence({ t }: { t: number }) {
   const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.x = clock.getElapsedTime() * 0.2;
-      groupRef.current.rotation.y = clock.getElapsedTime() * 0.3;
-      groupRef.current.rotation.z = clock.getElapsedTime() * 0.1;
+      // Rotate based on t
+      groupRef.current.rotation.x = t * Math.PI * 1.6;
+      groupRef.current.rotation.y = t * Math.PI * 2.4;
+      groupRef.current.rotation.z = t * Math.PI * 0.8;
     }
   });
 
