@@ -2,12 +2,13 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function Stage6OrderFromChaos({ t: _t }: { t: number }) {
+export default function Stage6OrderFromChaos({ t }: { t: number }) {
   const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.z = clock.getElapsedTime() * 0.3;
+      // Rotate based on t
+      groupRef.current.rotation.z = t * Math.PI * 2.4;
     }
   });
 

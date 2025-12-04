@@ -2,12 +2,13 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
-export default function Stage7Centre({ t: _t }: { t: number }) {
+export default function Stage7Centre({ t }: { t: number }) {
   const ref = useRef<THREE.Mesh>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (ref.current) {
-      const pulse = Math.sin(clock.getElapsedTime() * 2) * 0.2 + 1;
+      // Pulse based on t
+      const pulse = Math.sin(t * Math.PI * 4) * 0.2 + 1;
       ref.current.scale.setScalar(pulse);
     }
   });
